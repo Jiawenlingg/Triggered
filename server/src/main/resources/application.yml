@@ -5,8 +5,7 @@ spring:
       client:
         registration:
           google:
-            client-id: 835306076562-afj0r6029201r8abbpkgvv56t917jp2b.apps.googleusercontent.com
-            client-secret: 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
+
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email

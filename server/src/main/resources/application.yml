@@ -1,0 +1,27 @@
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 835306076562-afj0r6029201r8abbpkgvv56t917jp2b.apps.googleusercontent.com
+            client-secret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:~/test
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+app:
+  tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+  tokenExpirationMsec: 864000000
+  authorizedRedirectUris:
+    - http://localhost:3000/oauth2/redirect

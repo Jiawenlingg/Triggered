@@ -50,14 +50,6 @@ class App extends Component {
         });
       });
 
-      loadSavedTitles().then(response=> {
-          this.setState({
-            savedTitles :response
-          })
-        })
-        .catch(error=> {
-          this.savedTitles = null
-        })
   }
   
 
@@ -93,14 +85,12 @@ class App extends Component {
               authenticated={this.state.authenticated}
               currentUser={this.state.currentUser}
               component={Profile}
-              savedTitles={this.state.savedTitles}
             ></PrivateRoute>
             <PrivateRoute
             path="/addTitle"
             authenticated={this.state.authenticated}
             currentUser={this.state.currentUser}
             component={AddTitle}
-            savedTitles={this.state.savedTitles}
             >
             </PrivateRoute>
             <Route

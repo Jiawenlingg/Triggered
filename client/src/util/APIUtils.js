@@ -41,13 +41,20 @@ export function loadSavedTitles(){
   })
 }
 
-export function searchTitle(searchTerms){
+export function FetchTitle(searchTerms){
   const searchParams = new URLSearchParams();
   searchParams.append('title', searchTerms.searchTitle)
   searchParams.append('site', searchTerms.searchSite)
 
   return request({
     url: API_BASE_URL+'/search?' + searchParams.toString(),
+    method:'GET'
+  })
+}
+
+export function GetAllTitles(){
+  return request({
+    url: API_BASE_URL+'/getAll' ,
     method:'GET'
   })
 }

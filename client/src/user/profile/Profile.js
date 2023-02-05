@@ -5,18 +5,19 @@ import {Link} from 'react-router-dom'
 import AddTitle from "../AddTitles/AddTitle";
 
 export default function Profile(props){
-
+  
   console.log(props)
   return (
-    <div class="container">
-         <div class="main-body">
-           <div class="row gutters-sm">
-             <div class="col-md-4 mb-3">
-               <div class="card card-body d-flex flex-column align-items-center text-center">
+    <div className="container">
+         <div className="main-body">
+           <div className="row gutters-sm">
+             <div className="col-md-4 mb-3">
+               <div className="card card-body d-flex flex-column align-items-center text-center">
                  {props.currentUser.name}
                  <img
                   src={props.currentUser.imageUrl}
                   alt={props.currentUser.name}
+                  referrerPolicy="no-referrer"
                   className="rounded-circle"
                   width="150"
                 />
@@ -30,7 +31,7 @@ export default function Profile(props){
                   lastUpdated = {t.lastUpdated}></SavedTitle>
                 ))}
               </ul>: <h1>You do not have any saved titles! Add some Triggers now!</h1>}
-              <button ><Link to="/addTitle">Add Titles</Link></button>
+              <button ><span><Link to="/addTitle">Add Titles</Link></span></button>
             </div>
           </div>
         </div>

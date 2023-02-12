@@ -24,15 +24,13 @@
   }
 
 
-
-
 .result-title p{
     margin: 4px 2px;
 }
 
 .result-title{
     background-color: #6B728E;
-
+    margin: 4px 2px;
 }
 
 a { 
@@ -41,7 +39,13 @@ a {
 
 .image-section{
     min-height: 70%;
-   
+}
+
+.image-section img:hover::after{
+    content: "Select";
+    position: absolute;
+    background-color: black;
+    z-index: 1;
 }
 
 .image{

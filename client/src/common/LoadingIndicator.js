@@ -1,7 +1,7 @@
 import React , {CSSProperties}from "react";
 import { usePromiseTracker } from "react-promise-tracker";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import './LoadingIndicator.css'
 
 
 export default function LoadingIndicator(props) {
@@ -10,7 +10,9 @@ export default function LoadingIndicator(props) {
     backgroundColor: '#404258'
   }
   return (
-    promiseInProgress &&
-    <ClipLoader className="loading-indicator" color= "#de6864" loading={promiseInProgress} cssOverride={cssOverride}/>
-  );
+    <div className="loading-indicator">
+      {promiseInProgress &&
+      <ClipLoader color= "#de6864" loading={promiseInProgress} cssOverride={cssOverride}/>}
+    </div>
+    );
 }

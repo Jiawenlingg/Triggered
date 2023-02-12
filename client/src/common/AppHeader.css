@@ -29,21 +29,17 @@
 .app-nav ul li {
   list-style-type: none;
   display: inline-block;
+  color: white;
 }
 
 .app-nav ul li a {
+
   display: inline-block;
   line-height: 60px;
   vertical-align: middle;
   padding-left: 15px;
   padding-right: 15px;
-  color: rgba(0, 0, 0, 0.65);
+  
 }
 
-.app-nav ul li a:hover {
-  color: #0f96f6;
-}
 
-.app-nav ul li a.active {
-  color: #0f96f6;
-}

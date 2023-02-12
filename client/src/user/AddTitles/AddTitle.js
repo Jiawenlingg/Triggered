@@ -23,7 +23,8 @@ function AddTitle() {
     function reducer(state, action){
         switch (action.type){
             case ACTIONS.ADD:
-                setSelection(prevSelection=> [...prevSelection, action.payload]);
+                if(!selection.some(item=> item.url===action.payload.url))
+                    setSelection(prevSelection=> [...prevSelection, action.payload]);
                 break; 
             case ACTIONS.DELETE:
                 setSelection(prevSelection=> prevSelection.filter(item=> item.title!== action.payload.title && item.site!==action.payload.site))
@@ -79,7 +80,7 @@ function HandleSubmit(event){
                 <option value="novelupdates">Novel Updates</option>
                 <option value="mangago">Mangago</option>
             </select>
-            <button ><span>Search</span></button>
+            <button >Search</button>
         </form>
         <div className='main-section'>
         <span className='results'>

@@ -5,15 +5,14 @@ import { ACTIONS } from './AddTitle'
 function Result(props) {
   console.log(props)
   function HandleOnClick(){
-    console.log(`${props.result.title} selected!`)
-    if (selected!== true) props.AddItem(props.result)
-    setSelected(true)
+    console.log(`${props.result} selected!`)
+    props.dispatch({type: ACTIONS.ADD, payload: props.result})
   }
 
   const [selected, setSelected] = React.useState(false)
   return (
       <span className='result-card'>
-        <div className='image-section' onClick={()=> props.dispatch({type: ACTIONS.ADD, payload: props.result})}>
+        <div className='image-section' onClick={HandleOnClick}>
           <img className='image' src={props.result.image} alt={props.result.title} loading='lazy'/>
         </div>
         <div className='result-title'>

@@ -3,6 +3,9 @@ import { FetchTitle } from '../../util/APIUtils'
 import "./AddTitle.css"
 import Result from './Result'
 import SaveSelection from './SaveSelection'
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
+import LoadingIndicator from '../../common/LoadingIndicator'
+
 
 export const ACTIONS = {
     ADD: 'add',
@@ -12,14 +15,10 @@ export const ACTIONS = {
 function AddTitle() {
     const [searchResults, setSearchResults] = React.useState([])
     const [errorPresent, setErrorPresent] = React.useState(false)
-    const [loading, setLoading] = React.useState(false);
     const [selection, setSelection] = React.useState([])
     const [resultCount, setResultCount] = React.useState([])
 
-    // const [formData, setFormData] = React.useState({
-    //     searchTitle:"",
-    //     searchSite:""
-    // })
+    const { promiseInProgress } = usePromiseTracker();
 
     function reducer(state, action){
         switch (action.type){
@@ -31,9 +30,7 @@ function AddTitle() {
                 break;
             default:
                 throw new Error()
-
         }
-
     }
 
     const[selections, dispatch] = React.useReducer(reducer, [])
@@ -44,20 +41,18 @@ function AddTitle() {
 
 function HandleSubmit(event){
     event.preventDefault()
-    console.log("HANDLE SUBMIT FIRED")
-    setLoading(true)
+
     const formData = {searchTitle: inputTitle.current.value, searchSite: inputSite.current.value}
     const searchResults = FetchTitle(formData)
+    trackPromise(
     searchResults.then(res=>{
-        setLoading(false)
         if(res.length > 0){
+            setResultCount(res.length)
             setSearchResults(res)
         }
         else setErrorPresent(true)
-     }).catch(error=> setErrorPresent(true))
+     }).catch(error=> setErrorPresent(true)))   
     }
-
-
 
 // React.useEffect( ()=>{
 //         const searchResults = FetchTitle(formData)
@@ -73,8 +68,7 @@ function HandleSubmit(event){
 
   return (
     <>
-    {loading && <div className='background-blur'><div className='loader'></div></div>}
-    <div className='container'>
+    {!promiseInProgress && <div className='container'>
         <form onSubmit={HandleSubmit}>
             <input type="text" ref={inputTitle} className="searchTitle" placeholder='Solo Levelling'/>
             <select
@@ -89,6 +83,7 @@ function HandleSubmit(event){
         </form>
         <div className='main-section'>
         <span className='results'>
+            
             {errorPresent? <h2>No results found!</h2> : searchResults? searchResults.map(res=> <Result key={res.url} result={res} dispatch={dispatch}/>) : <h2>Hit the search button now!</h2>}
         </span>
 
@@ -96,7 +91,7 @@ function HandleSubmit(event){
             {searchResults && <SaveSelection selection={selection} dispatch={dispatch}/>}
         </span>
     </div>
-    </div>
+    </div>}
     </>
   )
 }

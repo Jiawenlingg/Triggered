@@ -3,7 +3,6 @@ import "./Login.css";
 import { GOOGLE_AUTH_URL } from "../../constants";
 import { Redirect } from "react-router-dom";
 import googleLogo from "../../img/google-logo.png";
-import Alert from "react-s-alert";
 
 class Login extends Component {
   componentDidMount() {
@@ -11,7 +10,7 @@ class Login extends Component {
     // Here we display the error and then remove the error query parameter from the location.
     if (this.props.location.state && this.props.location.state.error) {
       setTimeout(() => {
-        Alert.error(this.props.location.state.error, {
+        console.warn(this.props.location.state.error, {
           timeout: 5000
         });
         this.props.history.replace({

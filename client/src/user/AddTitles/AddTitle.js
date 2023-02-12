@@ -16,10 +16,10 @@ function AddTitle() {
     const [selection, setSelection] = React.useState([])
     const [resultCount, setResultCount] = React.useState([])
 
-    const [formData, setFormData] = React.useState({
-        searchTitle:"",
-        searchSite:""
-    })
+    // const [formData, setFormData] = React.useState({
+    //     searchTitle:"",
+    //     searchSite:""
+    // })
 
     function reducer(state, action){
         switch (action.type){
@@ -38,27 +38,20 @@ function AddTitle() {
 
     const[selections, dispatch] = React.useReducer(reducer, [])
 
-    // const AddItem= (obj)=> {
-    //     setSelection(prevSelection=> [...prevSelection, obj])
-    // }
-
-    // const RemoveItem= (obj)=> {
-    //     setSelection(prevSelection=> prevSelection.filter(item=> item.title!== obj.title && item.site!==obj.site))
-    // }
-
     const inputTitle = React.useRef("")
     const inputSite = React.useRef("")
 
 
 function HandleSubmit(event){
     event.preventDefault()
+    console.log("HANDLE SUBMIT FIRED")
     setLoading(true)
-    setFormData({searchTitle: inputTitle.current.value, searchSite: inputSite.current.value})
+    const formData = {searchTitle: inputTitle.current.value, searchSite: inputSite.current.value}
     const searchResults = FetchTitle(formData)
     searchResults.then(res=>{
         setLoading(false)
         if(res.length > 0){
-             setSearchResults(res)
+            setSearchResults(res)
         }
         else setErrorPresent(true)
      }).catch(error=> setErrorPresent(true))

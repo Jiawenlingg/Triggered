@@ -1,7 +1,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using triggeredapi.Helpers;
 using triggeredapi.Repo;
@@ -28,6 +30,10 @@ builder.Services.AddAuthentication(x=>{
 }).AddJwtBearer(x=> {
     x.TokenValidationParameters = new TokenValidationParameters{
         IssuerSigningKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"], 
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateIssuerSigningKey = true
     };
 });
@@ -37,10 +43,12 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllers();
+});
 
 app.Run();

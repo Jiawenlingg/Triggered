@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using triggeredapi.Models;
 using triggeredapi.Repo;
@@ -28,7 +30,6 @@ namespace triggeredapi.Controllers
                 return BadRequest("Username and/or password is empty");
             }
             var user = await _userRepo.GetByUserName(registerRequest.Username);
-            Console.WriteLine($"{user} - user");
             if(user!= null) return Conflict("Username already exists");
             User newUser = new User()
             {
@@ -50,6 +51,12 @@ namespace triggeredapi.Controllers
             if (!isCorrectPassword) return Unauthorized();
             string accessToken = _tokenGenerator.GenerateToken(user);
             return Ok(accessToken);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNovel()
+        {
+            return Ok();
         }
 
     }

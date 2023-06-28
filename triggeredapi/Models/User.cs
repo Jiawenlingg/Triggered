@@ -1,3 +1,4 @@
+using System;
 namespace triggeredapi.Models
 {
     public class User
@@ -6,5 +7,6 @@ namespace triggeredapi.Models
         public string Username {get; set;}
         public string PasswordHash {get; set;}
         public string TelegramId {get; set;}
+        public List<Novel> Novels {get; set; }
     }
 }

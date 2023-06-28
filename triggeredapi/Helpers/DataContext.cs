@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using triggeredapi.Models;
 
 namespace triggeredapi.Helpers{
 
@@ -7,6 +8,8 @@ namespace triggeredapi.Helpers{
         public DataContext(DbContextOptions<DataContext> options): base(options){
 
         }
+
+        public DbSet<User> User {get; set;}
 
         
     }

@@ -34,8 +34,8 @@ namespace triggeredapi.Controllers
             User newUser = new User()
             {
                 Username = registerRequest.Username,
-                PasswordHash = _passwordHasher.HashPassword(registerRequest.Password)
-                
+                PasswordHash = _passwordHasher.HashPassword(registerRequest.Password),
+                TelegramId = registerRequest.TelegramId
             };
             await _userRepo.Create(newUser);
             return Ok();
@@ -53,9 +53,10 @@ namespace triggeredapi.Controllers
             return Ok(accessToken);
         }
 
-        [HttpGet]
+        [HttpGet("try")]
         public async Task<IActionResult> GetNovel()
         {
+            Console.WriteLine("HIT BREAKPOINT");
             return Ok();
         }
 

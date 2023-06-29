@@ -2,6 +2,7 @@ namespace triggeredapi.Models
 {
     public class Novel
     {
+        public Guid Id {get; set;}
         public string Title {get; set;}
         public string Website {get; set;}
         public string Url {get; set;}

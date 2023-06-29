@@ -1,11 +1,10 @@
 using System;
+using Microsoft.AspNetCore.Identity;
+
 namespace triggeredapi.Models
 {
-    public class User
+    public class User: IdentityUser<Guid>
     {
-        public Guid Id {get; set;}
-        public string Username {get; set;}
-        public string PasswordHash {get; set;}
         public string TelegramId {get; set;}
         public List<Novel> Novels {get; set; }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using triggeredapi.Models;
 using triggeredapi.Repo;
@@ -12,14 +13,12 @@ namespace triggeredapi.Controllers
     [ApiController]
     public class AuthenticationController: ControllerBase
     {
-        private readonly IUserRepository _userRepo;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly UserManager<User> _userRepo;
         private readonly AccessTokenGenerator _tokenGenerator;
 
-        public AuthenticationController(IUserRepository userRepository, IPasswordHasher passwordHasher, AccessTokenGenerator tokenGenerator)
+        public AuthenticationController(UserManager<User> userRepository, AccessTokenGenerator tokenGenerator)
         {
             _userRepo = userRepository;
-            _passwordHasher  = passwordHasher;
             _tokenGenerator = tokenGenerator;
         }
 
@@ -29,15 +28,17 @@ namespace triggeredapi.Controllers
             if(!ModelState.IsValid){
                 return BadRequest("Username and/or password is empty");
             }
-            var user = await _userRepo.GetByUserName(registerRequest.Username);
-            if(user!= null) return Conflict("Username already exists");
             User newUser = new User()
             {
-                Username = registerRequest.Username,
-                PasswordHash = _passwordHasher.HashPassword(registerRequest.Password),
+                UserName = registerRequest.Username,
                 TelegramId = registerRequest.TelegramId
             };
-            await _userRepo.Create(newUser);
+            IdentityResult result = await _userRepo.CreateAsync(newUser, registerRequest.Password);    ;
+            if(!result.Succeeded){
+                IdentityErrorDescriber errorDescriber = new IdentityErrorDescriber();
+                IdentityError error = result.Errors.FirstOrDefault();
+                if(error.Code == nameof(errorDescriber.DuplicateUserName)) return Conflict("Username already exists");
+            }
             return Ok();
         }
 
@@ -45,9 +46,11 @@ namespace triggeredapi.Controllers
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             if (!ModelState.IsValid) return BadRequest();
-            User user = await _userRepo.GetByUserName(login.Username);
+            User user = await _userRepo.FindByNameAsync(login.Username);
             if(user==null) return Unauthorized();
-            bool isCorrectPassword = _passwordHasher.VerifyPassword(login.Password, user.PasswordHash);
+            Console.WriteLine($"{user.UserName}, {user.PasswordHash}");
+            bool isCorrectPassword = await _userRepo.CheckPasswordAsync(user, login.Password);
+            Console.WriteLine(isCorrectPassword);
             if (!isCorrectPassword) return Unauthorized();
             string accessToken = _tokenGenerator.GenerateToken(user);
             return Ok(accessToken);

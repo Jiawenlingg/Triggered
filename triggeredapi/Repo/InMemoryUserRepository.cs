@@ -25,7 +25,7 @@ namespace triggeredapi.Repo
 
         public async Task<User> GetByUserName(string username)
         {
-            return await _dbContext.User.FirstOrDefaultAsync(x=> x.Username.Equals(username));
+            return await _dbContext.User.FirstOrDefaultAsync(x=> x.UserName.Equals(username));
         }
         public async Task<User> GetByTelegramId(string telegramId)
         {

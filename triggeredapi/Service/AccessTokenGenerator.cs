@@ -23,7 +23,7 @@ namespace triggeredapi.Service
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             List<Claim> claims = new List<Claim>(){
                 new Claim("id", user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.UserName)
             };
             JwtSecurityToken token = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], claims, DateTime.UtcNow, DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JwtSettings:Expiration"])), credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);

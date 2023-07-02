@@ -15,6 +15,7 @@ namespace triggeredapi.Service
             _config = configuration;
             _telegramBot = new TelegramBotClient(_config.GetValue<string>("BotConfiguration:BotToken"));
             _cts = new CancellationTokenSource();
+            
         }
 
         public string GetUniqueLink()

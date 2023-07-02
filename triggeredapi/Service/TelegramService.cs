@@ -2,6 +2,7 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
+using triggeredapi.Helpers;
 
 namespace triggeredapi.Service
 {
@@ -10,17 +11,15 @@ namespace triggeredapi.Service
         private IConfiguration _config;
         private readonly TelegramBotClient _telegramBot;
         private readonly CancellationTokenSource _cts;
-        public TelegramService(IConfiguration configuration)
+        private readonly DataContext _dataContext;
+        private readonly IServiceScopeFactory _scopeFactory;
+        private TelegramMessageHandler _messageHandler;
+        public TelegramService(IConfiguration configuration, IServiceScopeFactory scopeFactory )
         {
             _config = configuration;
             _telegramBot = new TelegramBotClient(_config.GetValue<string>("BotConfiguration:BotToken"));
+            _scopeFactory = scopeFactory;
             _cts = new CancellationTokenSource();
-            
-        }
-
-        public string GetUniqueLink()
-        {
-            return "";
         }
 
         async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -31,17 +30,14 @@ namespace triggeredapi.Service
             // Only process text messages
             if (message.Text is not { } messageText)
                 return;
-
-            var chatId = message.Chat.Id;
-
-            Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
-
-            // Echo received message text
-            Message sentMessage = await botClient.SendTextMessageAsync(
-                chatId: chatId,
-                text: "You said:\n" + messageText,
-                cancellationToken: cancellationToken);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                _messageHandler = scope.ServiceProvider.GetRequiredService<TelegramMessageHandler>();
+                _messageHandler.LinkTelegramChatId(botClient, update.Message, cancellationToken);
+            }
         }
+
+
 
         Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {

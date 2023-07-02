@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddHostedService<TelegramService>();
 builder.Services.AddIdentityCore<User>(o=> 
 {   o.User.RequireUniqueEmail= false;
     o.Password.RequireDigit = false;
@@ -25,10 +24,12 @@ builder.Services.AddIdentityCore<User>(o=>
     o.Password.RequireNonAlphanumeric = false;
     o.Password.RequireUppercase = false;}).AddEntityFrameworkStores<DataContext>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
-builder.Services.AddScoped<IUserRepository, UserDb>();
+// builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
+// builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<AccessTokenGenerator>();
 builder.Services.AddDbContext<DataContext>(o=> o.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
+builder.Services.AddScoped<TelegramMessageHandler>();
+builder.Services.AddHostedService<TelegramService>();
 builder.Services.AddAuthentication(x=>{
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

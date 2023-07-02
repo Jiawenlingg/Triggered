@@ -23,7 +23,7 @@ namespace triggeredapi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] Login registerRequest)
         {
             if(!ModelState.IsValid){
                 return BadRequest("Username and/or password is empty");
@@ -31,7 +31,6 @@ namespace triggeredapi.Controllers
             User newUser = new User()
             {
                 UserName = registerRequest.Username,
-                TelegramId = registerRequest.TelegramId
             };
             IdentityResult result = await _userRepo.CreateAsync(newUser, registerRequest.Password);    ;
             if(!result.Succeeded){
@@ -39,7 +38,7 @@ namespace triggeredapi.Controllers
                 IdentityError error = result.Errors.FirstOrDefault();
                 if(error.Code == nameof(errorDescriber.DuplicateUserName)) return Conflict("Username already exists");
             }
-            return Ok();
+            return Ok($"https://t.me/i_am_triggered_bot?start={newUser.Id}");
         }
 
         [HttpPost("login")]

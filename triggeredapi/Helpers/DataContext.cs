@@ -10,6 +10,7 @@ namespace triggeredapi.Helpers{
         }
 
         public DbSet<User> User {get; set;}
+        public DbSet<Novel> Novel {get; set;}
 
         
     }

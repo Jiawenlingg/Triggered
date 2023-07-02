@@ -13,7 +13,7 @@ namespace triggeredapi.Service
         public TelegramService(IConfiguration configuration)
         {
             _config = configuration;
-            _telegramBot = new TelegramBotClient(_config.GetValue<string>("TelegramKey"));
+            _telegramBot = new TelegramBotClient(_config.GetValue<string>("BotConfiguration:BotToken"));
             _cts = new CancellationTokenSource();
         }
 

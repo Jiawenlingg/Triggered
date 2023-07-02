@@ -1,3 +1,4 @@
+using System;
 namespace triggeredapi.Models
 {
     public class Novel

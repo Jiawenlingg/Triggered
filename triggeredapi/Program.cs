@@ -27,6 +27,7 @@ builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 // builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<AccessTokenGenerator>();
+builder.Services.AddSingleton<NovelParser>();
 builder.Services.AddDbContext<DataContext>(o=> o.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
 builder.Services.AddScoped<TelegramMessageHandler>();
 builder.Services.AddHostedService<TelegramService>();

@@ -55,12 +55,5 @@ namespace triggeredapi.Controllers
             return Ok(accessToken);
         }
 
-        [HttpGet("try")]
-        public async Task<IActionResult> GetNovel()
-        {
-            Console.WriteLine("HIT BREAKPOINT");
-            return Ok();
-        }
-
     }
 }

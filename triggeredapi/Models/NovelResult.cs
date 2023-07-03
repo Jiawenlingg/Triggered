@@ -7,5 +7,10 @@ namespace triggeredapi.Models
         public string Url {get; set;}
         public DateTime LastUpdate {get; set;}
         public int LatestChapter {get; set;}
+
+        public override string? ToString()
+        {
+            return $"{Title}: {LastUpdate} - {LatestChapter}";
+        }
     }
 }

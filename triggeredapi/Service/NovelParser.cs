@@ -4,89 +4,109 @@ using System.Globalization;
 
 namespace triggeredapi.Service
 {
-    public enum NovelSite{
-        mangago,
-        asurascans,
-        novelupdate
-    }
     public class NovelParser
     {
-        public NovelResult GetNovel(NovelSite site, string title){
-            switch (site)
+        private Dictionary<string, string> urls = new Dictionary<string, string>(){
+            {"www.mangago.me", "https://www.mangago.me/read-manga/"},
+            {"www.novelupdates.com", "https://www.novelupdates.com/series/"},
+            {"www.asurascans.com", "https://www.asurascans.com/"}
+        };
+        public NovelResult GetNovel(string url){
+            try
             {
-                case NovelSite.mangago: return MangagoParser(title);
-                case NovelSite.asurascans: return AsuraParser(title);
-                case NovelSite.novelupdate: return NovelUpdateParser(title);
-                default: throw new Exception ("Error: no such parser");
+                var uri = new Uri(url);
+                var domain = uri.Host;
+                if(!urls.TryGetValue(domain, out string siteUrl)) 
+                    throw new Exception("Not a supported website!");
+                var title = uri.Segments.LastOrDefault();
+                var finalUrl = siteUrl+title;
+                // var mangagoUrl = $@"{title.Replace(" ", "_").Replace("'", "_")}/";
+                // var novelUpdateUrl = $@"{title.Replace("_","-").Replace("'", "")}/";
+                // var AsuraScansUrl = $@"{title.Replace("_","-").Replace("'", "")}/";
+                switch (domain)
+                {
+                    case "www.mangago.me": return MangagoParser(finalUrl);
+                    case "www.asurascans.com": return AsuraParser(finalUrl);
+                    case "www.novelupdates.com": return NovelUpdateParser(finalUrl);
+                    default: throw new Exception ("Error: no such parser");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Could not find novel: {ex}");
             }
         }
-        public NovelResult MangagoParser(string title)
+        public NovelResult MangagoParser(string url)
         {
-            var html = $@"https://www.mangago.me/read-manga/{title.Replace(" ", "_")}/";
-
             HtmlWeb web = new HtmlWeb();
-
-            var htmlDoc = web.Load(html);
+            var htmlDoc = web.Load(url);
 
             var novel_title = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='w-title']/h1").InnerText.Trim('\r', '\n', '\t');
             var latest = htmlDoc.DocumentNode.SelectSingleNode("//table[@id='chapter_table']/tbody/tr[1]");
             var latestUpdate = latest.SelectSingleNode("./td[last()]").InnerText.Trim('\r', '\n', '\t');
             var latestChapter = latest.SelectSingleNode("./td[1]/h4/a/b").InnerText.Trim('\r', '\n', '\t').Replace("Ch.", "");
+            var pic = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='left cover']/img").Attributes["src"].Value;
             DateTime.TryParse(latestUpdate, out DateTime dt);
             int.TryParse(latestChapter, out int chapter);
             var result = new NovelResult(){
                 LastUpdate = dt,
                 LatestChapter = chapter,
                 Title = novel_title,
-                Website = "Mangago"
+                Website = "Mangago",
+                Url = url,
+                Image = pic
             };
             Console.WriteLine(result);
             return result;
         }
 
-        public NovelResult NovelUpdateParser(string title)
+        public NovelResult NovelUpdateParser(string url)
         {
-             var html = $@"https://www.novelupdates.com/series/{title.Replace("_","-")}/";
 
             HtmlWeb web = new HtmlWeb();
 
-            var htmlDoc = web.Load(html);
+            var htmlDoc = web.Load(url);
 
             var novel_title = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='seriestitlenu']").InnerText.Trim('\r', '\n', '\t');
-            var entry = htmlDoc.DocumentNode.SelectSingleNode("//table[@id='myTable']//tbody");
-            var latestUpdate = entry.SelectSingleNode("./tr[0]").InnerText.Trim('\r', '\n', '\t');
-            var latestChapter = entry.SelectSingleNode("./tr[2]/a[0]").InnerText.Trim('\r', '\n', '\t');
+            var entry = htmlDoc.DocumentNode.SelectSingleNode("//table[@id='myTable']/tbody/tr[1]");
+            var latestChapter = entry.SelectSingleNode("./td[last()]/a[1]").InnerText.Trim('\r', '\n', '\t').Replace("c","");
+            var latestUpdate = entry.SelectSingleNode("./td[1]").InnerText.Trim('\r', '\n', '\t');
+            var pic = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='seriesimg']/img").Attributes["src"].Value;
             DateTime.TryParse(latestUpdate, out DateTime dt);
             int.TryParse(latestChapter, out int chapter);
             var result = new NovelResult(){
                 LastUpdate = dt,
                 LatestChapter = chapter,
                 Title = novel_title,
-                Website = "Asura Scan"
+                Website = "Novel Update",
+                Url = url,
+                Image = pic
             };
             Console.WriteLine(result);
             return result;
         }
 
-         public NovelResult AsuraParser(string title)
+         public NovelResult AsuraParser(string url)
         {
-            var html = $@"https://www.asurascans.com/{title.Replace("_","-")}/";
-
             HtmlWeb web = new HtmlWeb();
 
-            var htmlDoc = web.Load(html);
+            var htmlDoc = web.Load(url);
 
-            var entry = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='entry-title']").InnerText.Trim('\r', '\n', '\t');
-            var novel_title = string.Concat(entry.Take(entry.IndexOf("Chapter")-1));
-            var latestUpdate = htmlDoc.DocumentNode.SelectSingleNode("//time[@class='entry-date']").InnerText.Trim('\r', '\n', '\t');
-            var latestChapter = entry.Split("Chapter").Last().Trim();
+            var novel_title = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='entry-title']").InnerText.Trim('\r', '\n', '\t');
+            var entry = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='chapterlist']/ul/li[1]");
+            var latestChapter = entry.SelectSingleNode(".//span[@class='chapternum']").InnerText.Trim('\r', '\n', '\t').Replace("Chapter ", "");
+            var latestUpdate = entry.SelectSingleNode(".//span[@class='chapterdate']").InnerText.Trim('\r', '\n', '\t');
+            var pic = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='thumb']/img").Attributes["src"].Value;
+
             DateTime.TryParse(latestUpdate, out DateTime dt);
             int.TryParse(latestChapter, out int chapter);
             var result = new NovelResult(){
                 LastUpdate = dt,
                 LatestChapter = chapter,
                 Title = novel_title,
-                Website = "Asura Scan"
+                Website = "Asura Scan",
+                Url = url,
+                Image = pic
             };
             Console.WriteLine(result);
             return result;

@@ -11,8 +11,8 @@ using triggeredapi.Helpers;
 namespace triggeredapi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230702122441_TelegramidUpdate")]
-    partial class TelegramidUpdate
+    [Migration("20230708082513_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,10 @@ namespace triggeredapi.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastUpdate")

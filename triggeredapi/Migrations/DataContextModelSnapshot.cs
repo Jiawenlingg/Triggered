@@ -38,6 +38,10 @@ namespace triggeredapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("TEXT");
 

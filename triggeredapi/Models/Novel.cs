@@ -9,7 +9,8 @@ namespace triggeredapi.Models
         public string Url {get; set;}
         public DateTime LastUpdate {get; set;}
         public int LatestChapter {get; set;}
-
+        public string Image {get; set;}
+        
         public List<User> Users {get; set;}
     }
 }

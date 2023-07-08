@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddIdentityCore<User>(o=> 
 {   o.User.RequireUniqueEmail= false;
@@ -24,9 +27,12 @@ builder.Services.AddIdentityCore<User>(o=>
     o.Password.RequireNonAlphanumeric = false;
     o.Password.RequireUppercase = false;}).AddEntityFrameworkStores<DataContext>();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(c => c.AddProfile<NovelAutoMapperProfile>());
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 // builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 // builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<AccessTokenGenerator>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<NovelParser>();
 builder.Services.AddDbContext<DataContext>(o=> o.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
 builder.Services.AddScoped<TelegramMessageHandler>();

@@ -6,16 +6,20 @@ namespace triggeredapi.Service
 {
     public class NovelParser
     {
+        private const string MANGAGO = "mangago.me";
+        private const string ASURA = "asuratoon.com";
+        private const string NOVELUPDATE = "novelupdates.com";
+
         private Dictionary<string, string> urls = new Dictionary<string, string>(){
-            {"www.mangago.me", "https://www.mangago.me/read-manga/"},
-            {"www.novelupdates.com", "https://www.novelupdates.com/series/"},
-            {"www.asurascans.com", "https://www.asurascans.com/"}
+            {MANGAGO, "https://www.mangago.me/read-manga/"},
+            {NOVELUPDATE, "https://www.novelupdates.com/series/"},
+            {ASURA, "https://asuratoon.com/manga/"}
         };
         public NovelResult GetNovel(string url){
             try
             {
                 var uri = new Uri(url);
-                var domain = uri.Host;
+                var domain = uri.Host.Replace("www.", "");
                 if(!urls.TryGetValue(domain, out string siteUrl)) 
                     throw new Exception("Not a supported website!");
                 var title = uri.Segments.LastOrDefault();
@@ -25,15 +29,15 @@ namespace triggeredapi.Service
                 // var AsuraScansUrl = $@"{title.Replace("_","-").Replace("'", "")}/";
                 switch (domain)
                 {
-                    case "www.mangago.me": return MangagoParser(finalUrl);
-                    case "www.asurascans.com": return AsuraParser(finalUrl);
-                    case "www.novelupdates.com": return NovelUpdateParser(finalUrl);
+                    case MANGAGO: return MangagoParser(finalUrl);
+                    case ASURA: return AsuraParser(finalUrl);
+                    case NOVELUPDATE: return NovelUpdateParser(finalUrl);
                     default: throw new Exception ("Error: no such parser");
                 }
             }
             catch (System.Exception ex)
             {
-                throw new Exception($"Could not find novel: {ex}");
+                throw new Exception($"Error getting novel");
             }
         }
         public NovelResult MangagoParser(string url)
@@ -91,8 +95,7 @@ namespace triggeredapi.Service
             HtmlWeb web = new HtmlWeb();
 
             var htmlDoc = web.Load(url);
-
-            var novel_title = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='entry-title']").InnerText.Trim('\r', '\n', '\t');
+            var novel_title = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='entry-title']").InnerText;
             var entry = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='chapterlist']/ul/li[1]");
             var latestChapter = entry.SelectSingleNode(".//span[@class='chapternum']").InnerText.Trim('\r', '\n', '\t').Replace("Chapter ", "");
             var latestUpdate = entry.SelectSingleNode(".//span[@class='chapterdate']").InnerText.Trim('\r', '\n', '\t');

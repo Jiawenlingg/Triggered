@@ -25,9 +25,6 @@ namespace triggeredapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] Login registerRequest)
         {
-            if(!ModelState.IsValid){
-                return BadRequest("Username and/or password is empty");
-            }
             User newUser = new User()
             {
                 UserName = registerRequest.Username,
@@ -44,7 +41,6 @@ namespace triggeredapi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
-            if (!ModelState.IsValid) return BadRequest();
             User user = await _userRepo.FindByNameAsync(login.Username);
             if(user==null) return Unauthorized();
             Console.WriteLine($"{user.UserName}, {user.PasswordHash}");
@@ -54,6 +50,8 @@ namespace triggeredapi.Controllers
             string accessToken = _tokenGenerator.GenerateToken(user);
             return Ok(accessToken);
         }
+
+        
 
     }
 }

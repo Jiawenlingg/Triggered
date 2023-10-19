@@ -1,0 +1,55 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10vh 20vw;
+    gap: 20px;
+
+}
+
+.links:hover{
+    text-decoration: underline;
+    text-decoration-color: red;
+    cursor: pointer;
+}
+
+img {
+    padding: 3px;
+    width: 30px;
+    height: 8px;
+    margin-right: 10px;
+}
+
+form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+Button{
+    margin-top: 20px;
+}
+
+.input-form{
+    background-color: grey;
+    margin-bottom: 20px;
+    height: 50px;
+    width: 400px;
+    display: flex;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+input {
+    padding: 5px;
+    background: transparent;
+    outline: none;
+    font-size: 19px;
+}
+
+@media screen and (max-width: 768px) {
+    form{
+        width: 85%
+    }
+  }

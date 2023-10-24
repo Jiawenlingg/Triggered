@@ -68,27 +68,49 @@ namespace triggeredapi.Controllers
             }
         }
 
-        [HttpPost("save")]
+
+           [HttpPost("save")]
         [Authorize]
-        public async Task<IActionResult> SaveNovels([FromBody]List<NovelResult> saveResults)
+        public async Task<IActionResult> SaveNovels([FromBody] NovelResult toSave)
         {
+            if (toSave.Title==null) return BadRequest("Error adding Triggers");
             var username = User.Identity.Name;
             var user =  _userManager.Users.Include(x=> x.Novels).Single(x=> x.UserName==username);
-            foreach(var result in saveResults)
+            var novel = _dataContext.Novel.FirstOrDefault(x=> x.Title.Equals(toSave.Title) && x.Website.Equals(toSave.Website));
+            if(novel == null)
             {
-                var novel = _dataContext.Novel.FirstOrDefault(x=> x.Title.Equals(result.Title) && x.Website.Equals(result.Website));
-                if(novel == null)
-                {
-                    novel = _mapper.Map<Novel>(result);                  
-                }
-                
-                user.Novels.Add(novel);
+                novel = _mapper.Map<Novel>(toSave);                  
             }
+            
+            user.Novels.Add(novel);
+            
             int saved = await _dataContext.SaveChangesAsync();
             
             return Ok($"Novels saved!");
 
         }
+
+        // [HttpPost("save")]
+        // [Authorize]
+        // public async Task<IActionResult> SaveNovels([FromBody]List<NovelResult> saveResults)
+        // {
+        //     var username = User.Identity.Name;
+        //     var user =  _userManager.Users.Include(x=> x.Novels).Single(x=> x.UserName==username);
+        //     foreach(var result in saveResults)
+        //     {
+        //         var novel = _dataContext.Novel.FirstOrDefault(x=> x.Title.Equals(result.Title) && x.Website.Equals(result.Website));
+        //         if(novel == null)
+        //         {
+        //             novel = _mapper.Map<Novel>(result);                  
+        //         }
+                
+        //         user.Novels.Add(novel);
+        //     }
+        //     int saved = await _dataContext.SaveChangesAsync();
+            
+        //     return Ok($"Novels saved!");
+
+        // }
 
         [HttpPost("delete")]
         [Authorize]

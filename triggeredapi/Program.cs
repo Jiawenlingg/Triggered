@@ -13,10 +13,17 @@ using triggeredapi.Service;
 using triggeredapi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
-
+string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
-
-builder.Services.AddControllers().AddJsonOptions(x =>
+builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(MyAllowSpecificOrigins,
+            builder =>
+            {
+                builder.SetIsOriginAllowed(isOriginAllowed: _ => true).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            });
+        });
+builder.Services.AddControllers(y=> y.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true).AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,8 +42,8 @@ builder.Services.AddSingleton<AccessTokenGenerator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<NovelParser>();
 builder.Services.AddDbContext<DataContext>(o=> o.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
-builder.Services.AddScoped<TelegramMessageHandler>();
-builder.Services.AddHostedService<TelegramService>();
+// builder.Services.AddScoped<TelegramMessageHandler>();
+// builder.Services.AddHostedService<TelegramService>();
 builder.Services.AddAuthentication(x=>{
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,7 +61,7 @@ builder.Services.AddAuthentication(x=>{
 
 
 var app = builder.Build();
-
+app.UseCors(MyAllowSpecificOrigins);
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -62,6 +69,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<DataContext>();    
     context.Database.Migrate();
 }
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();

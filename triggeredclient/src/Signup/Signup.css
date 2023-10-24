@@ -1,4 +1,4 @@
-.container{
+/* .container{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,18 +14,14 @@
     cursor: pointer;
 }
 
-.input-form img {
-    width: 2rem;
-    height: 2rem;
+img {
+    padding: 3px;
+    width: 30px;
+    height: 8px;
     margin-right: 10px;
 }
 
-.login-border {
-    border-top: 6px solid red;
-    width: 40vw;
-}
-
-.login-form{
+form{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -39,16 +35,21 @@ Button{
     background-color: grey;
     margin-bottom: 20px;
     height: 50px;
-    max-width: 90vw;
+    width: 400px;
     display: flex;
     border-radius: 6px;
     padding: 5px;
 }
 
-
+input {
+    padding: 5px;
+    background: transparent;
+    outline: none;
+    font-size: 19px;
+}
 
 @media screen and (max-width: 768px) {
-    .login-form{
-        width: 90%
+    form{
+        width: 85%
     }
-  }
+  } */

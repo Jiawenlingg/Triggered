@@ -7,14 +7,14 @@
     position: relative;
 }
 
-.header a {
+.header li {
     padding: 20px;
     font-size: 18px;
     border-radius: 6px;
 }
 
-.header a:hover{
-    background-color: red;
+span:hover{
+    color: red;
 }
 
 hr.solid {
@@ -53,10 +53,16 @@ hr.solid {
     display: none;
 }
 
+.hamburger img {
+  width: 2rem;
+  height: 2rem;
+}
 
-@media screen and (max-width: 768px) {
+
+@media screen and (max-width: 1024px) {
     .hamburger {
         display: block;
+        z-index: 1;
       }
 
       .navigation-menu ul {
@@ -70,7 +76,7 @@ hr.solid {
   }
 
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1024px) {
     .navigation-menu ul {
       position: absolute;
       top: 60px;
@@ -82,9 +88,18 @@ hr.solid {
       background-color: black;
       border-top: 1px solid white;
     }
+
+    .header span:hover{
+        color: white;
+    }
     .navigation-menu li {
       text-align: center;
       margin: 0;
+      
+    }
+
+    li > a > span {
+      width: 100%;
     }
     .navigation-menu li a {
       color: black;

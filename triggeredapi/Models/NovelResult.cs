@@ -4,13 +4,8 @@ namespace triggeredapi.Models
 {
     public class NovelResult
     {
-        [Required]
         public string Title {get; set;}
-
-        [Required]
         public string Website {get; set;}
-
-        [Required]
         public string Url {get; set;}
         public string Image {get; set;}
         public DateTime LastUpdate {get; set;}

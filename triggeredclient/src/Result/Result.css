@@ -1,0 +1,31 @@
+@media screen and (max-width: 700px) {
+    .result-details img {
+        width: 50%;
+        height: 50%;
+    }
+}
+
+.result-details img {
+    width: 30%;
+    height: 30%;
+}
+
+.result-details {
+
+    display: flex;
+}
+
+.result-details button {
+    border: solid 2px red;
+    border-radius: 6px;
+    padding: 0.8rem;
+}
+
+.result-details button:hover {
+    background-color: red;
+    color: white;
+}
+
+.result-details a:hover {
+    color: red;
+}

@@ -42,8 +42,7 @@ hr.solid {
   }
 
 .hamburger{
-    background-color: white;
-    color: white;
+    filter: invert();
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     position: absolute;

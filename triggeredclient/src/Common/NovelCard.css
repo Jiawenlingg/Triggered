@@ -1,0 +1,28 @@
+@media screen and (max-width: 700px) {
+    .result-details img {
+        width: 50%;
+        height: 50%;
+    }
+}
+
+.result-image{
+    width: 20%;
+    height: 20%;
+}
+
+.result-image image{
+    width: 100%;
+    height: 100%;
+}
+
+.result-details {
+
+    display: flex;
+}
+
+
+.result-details a:hover {
+    color: red;
+}
+
+

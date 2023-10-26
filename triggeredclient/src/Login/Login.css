@@ -14,41 +14,12 @@
     cursor: pointer;
 }
 
-.input-form img {
-    width: 2rem;
-    height: 2rem;
-    margin-right: 10px;
-}
 
-.login-border {
-    border-top: 6px solid red;
-    width: 40vw;
-}
 
-.login-form{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
+
+
 
 Button{
     margin-top: 20px;
 }
 
-.input-form{
-    background-color: grey;
-    margin-bottom: 20px;
-    height: 50px;
-    max-width: 90vw;
-    display: flex;
-    border-radius: 6px;
-    padding: 5px;
-}
-
-
-
-@media screen and (max-width: 768px) {
-    .login-form{
-        width: 90%
-    }
-  }

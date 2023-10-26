@@ -1,20 +1,14 @@
 import React from 'react'
 import './Result.css'
+import NovelCard from '../Common/NovelCard'
 
 function Result({result, handleAddTrigger}) {
+  console.log(result)
   return (
     <div className='result-container'>
-      <div className='text-xl mb-1'>Results: </div>
-      <div className='result-details'>
-      <img src={result.Image}></img>
-      <div className='result-text ml-6'>
-        <a href={result.Url} target="_blank" rel="noopener noreferrer" className='cursor-pointer text-xl'>{result.Title}</a>
-        <p>Site: {result.Website}</p>
-        <p>Last updated: {result.LastUpdate}</p>
-        <p>Latest chapter: {result.LatestChapter}</p>
+      <div className='text-xl mb-4'>Results: </div>
+      <NovelCard novel={result}></NovelCard>
       <button className='mt-4' onClick={handleAddTrigger}>ADD TRIGGER</button>
-      </div>
-      </div>
     </div>
   )
 }

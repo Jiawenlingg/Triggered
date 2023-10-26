@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Signup.css'
+import '../Form.css'
 import Button from 'react-bootstrap/Button';
 import User from './../assets/user.png'
 import Lock from './../assets/lock.png'
@@ -40,9 +41,9 @@ function Signup() {
 
   return (
     <div className='container'>
-        <h1 className='text-4xl'>Sign in</h1>
-        <hr className='border-3 w-1/2'></hr>
-        <form onSubmit={handleSubmit}>
+        <h1 className='text-4xl'>Sign up</h1>
+        <div id='border'></div>
+        <form className='login-form' onSubmit={handleSubmit}>
             <div className='input-form'>
                 <img src={User}></img>
                 <input placeholder='Username' name="username" value={formdata.username} onChange={handleChange}></input>
@@ -50,10 +51,6 @@ function Signup() {
             <div className='input-form'>
                 <img src={Lock}></img>
                 <input placeholder='Password' name="password" type='password' value={formdata.password} onChange={handleChange}></input>
-            </div>
-            <div className='input-form'>
-                <img src={Email}></img>
-                <input placeholder='Email' name="email"  value={formdata.email} onChange={handleChange}></input>
             </div>
             <div className='h-10'>
                 <div style={{ color: 'red' }}>{inputError}</div>

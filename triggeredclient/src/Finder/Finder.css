@@ -16,17 +16,20 @@
 }
 
 
-
 .finder-form {
-    max-width: 90vw;
     white-space: nowrap;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 0.5rem;
+    align-self: center;
+}
+
+@media screen and (max-width: 768px){
+    .finder-form {
+        width:80%;
+    }
 }
 
 .finder-button {
-    margin-left: 5px;
     padding: 0.5rem;
 }
 

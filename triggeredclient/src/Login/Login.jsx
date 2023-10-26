@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Login.css'
+import '../Form.css'
 import Button from 'react-bootstrap/Button';
 import User from './../assets/user.png'
 import Lock from './../assets/lock.png'
@@ -49,7 +50,7 @@ function Login({setToken}) {
   return (
     <div className='container'>
         <h1 className='text-4xl'>Login</h1>
-        <div className='login-border'></div>
+        <div id='border'></div>
         <form className='login-form' onSubmit={handleSubmit}>
             <div className='input-form'>
                 <img src={User}></img>

@@ -1,31 +1,16 @@
-@media screen and (max-width: 700px) {
-    .result-details img {
-        width: 50%;
-        height: 50%;
-    }
-}
-
-.result-details img {
-    width: 30%;
-    height: 30%;
-}
-
-.result-details {
-
+.result-container{
     display: flex;
+    flex-direction: column;
 }
 
-.result-details button {
+.result-container button {
     border: solid 2px red;
     border-radius: 6px;
     padding: 0.8rem;
+    align-self: flex-end;
 }
 
-.result-details button:hover {
+.result-container button:hover {
     background-color: red;
     color: white;
-}
-
-.result-details a:hover {
-    color: red;
 }

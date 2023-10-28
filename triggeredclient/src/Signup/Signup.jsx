@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Signup() {
     const navigate = useNavigate()
-    const [formdata, setFormdata] = useState({username:'', password: '', email:''})
+    const [formdata, setFormdata] = useState({username:'', password: ''})
     const [inputError, setInputError] = useState('')
     const handleChange = (event) => {
         const {name, value} = event.target

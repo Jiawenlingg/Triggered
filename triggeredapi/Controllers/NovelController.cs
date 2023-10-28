@@ -51,8 +51,8 @@ namespace triggeredapi.Controllers
                 var username = User.Identity.Name;
                 var user = _userManager.Users.Include(x=> x.Novels).First(x=> x.UserName== username);
                 if (!user.Novels.Any()) return NoContent();
-                return Ok(user.Novels.Select(x=> new NovelResult(){
-
+                return Ok(user.Novels.Select(x=> new NovelDto(){
+                    Id=x.Id,
                     Title = x.Title,
                     Website = x.Website,
                     Url = x.Url,
@@ -112,22 +112,18 @@ namespace triggeredapi.Controllers
 
         // }
 
-        [HttpPost("delete")]
+        [HttpDelete("delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> RemoveNovels([FromBody]List<NovelResult> saveResults)
+        public async Task<IActionResult> RemoveNovels(string id)
         {
             var username = User.Identity.Name;
             var user = _userManager.Users.Include(x=> x.Novels).Single(x=> x.UserName == username);
-            var count = 0;
-            foreach(var result in saveResults)
-            {
-                var novel = _dataContext.Novel.FirstOrDefault(x=> x.Title.Equals(result.Title)&& x.Website.Equals(result.Website));
-                if(novel == null) continue;
-                user.Novels.Remove(novel);
-                count++;
-            }
+
+            var novel = _dataContext.Novel.Where(x=> x.Id == new Guid(id)).FirstOrDefault();
+            if(novel == null) return BadRequest("Novel not found");
+            user.Novels.Remove(novel);
             await _dataContext.SaveChangesAsync();
-            return Ok($"{count} Novels removed!");
+            return Ok("Novel removed!");
 
         }
     }

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import AuthService from '../Services/AuthService'
 import NovelCard from '../Common/NovelCard'
-import ProfileCard from './ProfileCard'
+import ProfileTitles from './ProfileTitles'
+import TelegramProfile from './TelegramProfile'
 
 function Profile() {
-  console.log("profile")
   const [allNovels, setAllNovels] = useState([])
 
   const handleDelete = (ID)=> {
@@ -21,14 +21,11 @@ function Profile() {
     .catch(err=> alert("An error occured while loading your profile!"))
   },[])
 
-
-  return (
-    <div className='profile-container flex flex-col gap-5'>
-      {allNovels.map(x=> {
-        console.log(x.title)
-        return (<ProfileCard key={x.id} novel={x} handleDelete={handleDelete}/>)
-    })}
-    </div>
+  return( 
+    <>
+    <TelegramProfile></TelegramProfile>
+    <ProfileTitles allNovels={allNovels} handleDelete={handleDelete}></ProfileTitles>
+    </>
   )
 }
 

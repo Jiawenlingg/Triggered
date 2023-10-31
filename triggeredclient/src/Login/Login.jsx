@@ -10,8 +10,6 @@ import { BASEURL } from '../Constants';
 import { useNavigate } from 'react-router-dom';
 import { userStore } from '../Store/AuthStore';
 
-
-
 function Login({setToken}) {
     const navigate = useNavigate()
     const setUser = userStore((state)=> state.setUser)

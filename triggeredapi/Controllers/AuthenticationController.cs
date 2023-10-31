@@ -23,7 +23,7 @@ namespace triggeredapi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] Login registerRequest)
+        public async Task<IActionResult> Register(Login registerRequest)
         {
             User newUser = new User()
             {
@@ -35,7 +35,9 @@ namespace triggeredapi.Controllers
                 IdentityError error = result.Errors.FirstOrDefault();
                 if(error.Code == nameof(errorDescriber.DuplicateUserName)) return Conflict("Username already exists");
             }
-            return Ok($"https://t.me/i_am_triggered_bot?start={newUser.Id}");
+            // return Ok($"https://t.me/i_am_triggered_bot?start={newUser.Id}");
+            return Ok();
+
         }
 
         [HttpPost("login")]

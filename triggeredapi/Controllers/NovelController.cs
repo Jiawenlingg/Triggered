@@ -69,7 +69,7 @@ namespace triggeredapi.Controllers
         }
 
 
-           [HttpPost("save")]
+        [HttpPost("save")]
         [Authorize]
         public async Task<IActionResult> SaveNovels([FromBody] NovelResult toSave)
         {

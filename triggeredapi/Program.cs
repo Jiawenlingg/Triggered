@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Telegram.Bot;
 using triggeredapi.Helpers;
 using triggeredapi.Models;
 using triggeredapi.Repo;
 using triggeredapi.Service;
+using triggeredapi.Telegram;
 using triggeredapi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,8 +44,19 @@ builder.Services.AddSingleton<AccessTokenGenerator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<NovelParser>();
 builder.Services.AddDbContext<DataContext>(o=> o.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
-// builder.Services.AddScoped<TelegramMessageHandler>();
-// builder.Services.AddHostedService<TelegramService>();
+var botConfigurationSection = builder.Configuration.GetSection(BotConfiguration.Configuration);
+builder.Services.Configure<BotConfiguration>(botConfigurationSection);
+
+var botConfiguration = botConfigurationSection.Get<BotConfiguration>();
+builder.Services.AddHttpClient("telegram_bot_client")
+                .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
+                {
+                    BotConfiguration? botConfig = sp.GetConfiguration<BotConfiguration>();
+                    TelegramBotClientOptions options = new(botConfig.BotToken);
+                    return new TelegramBotClient(options, httpClient);
+                });
+builder.Services.AddScoped<UpdateHandlers>();
+builder.Services.AddHostedService<ConfigureWebhook>();
 builder.Services.AddAuthentication(x=>{
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,12 +82,11 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<DataContext>();    
     context.Database.Migrate();
 }
-
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapBotWebhookRoute<BotController>(route: botConfiguration.Route);
 app.MapControllers();
 
 app.Run();

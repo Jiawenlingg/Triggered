@@ -1,13 +1,26 @@
 .result-container{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 768px){
+    .result-container{
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .result-container button {
+        align-self: flex-end;
+    }
 }
 
 .result-container button {
     border: solid 2px red;
     border-radius: 6px;
-    padding: 0.8rem;
-    align-self: flex-end;
+    width: 140px;
+    height: 55px;
+    
 }
 
 .result-container button:hover {
